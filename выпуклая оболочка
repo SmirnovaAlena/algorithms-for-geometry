@@ -1,0 +1,33 @@
+int cross(pair<int,int> a, pair<int, int> b, pair<int, int> c) {
+	return (b.first - a.first) * (c.second - a.second) - (b.second - a.second) * (c.first - a.first);
+}
+vector<pair<int, int>> func(vector<pair<int, int>> v) {
+	vector<pair<int, int>> lower;
+	for (int i = 0; i < v.size(); i++) {
+		while (lower.size() >= 2 && cross(lower[lower.size() - 2], lower[lower.size() - 1], v[i]) <= 0) {
+			lower.pop_back();
+
+		}
+		lower.push_back(v[i]);
+	}
+	reverse(v.begin(), v.end());
+	vector<pair<int, int>> upper;
+	for (int i = 0; i < v.size(); i++) {
+		while (upper.size() >= 2 && cross(upper[upper.size() - 2], upper[upper.size() - 1], v[i]) <= 0) {
+			upper.pop_back();
+
+		}
+		upper.push_back(v[i]);
+	}
+	
+	vector < pair<int, int>> res;
+	for (auto y : lower) {
+		res.push_back(y);
+	}
+	lower.pop_back();
+	for (auto y : upper) {
+		res.push_back(y);
+	}
+	upper.pop_back();
+	return res;
+}
