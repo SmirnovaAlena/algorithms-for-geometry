@@ -1,0 +1,70 @@
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<set>
+#include<cmath>
+using namespace std;
+int cross(pair<int,int> a, pair<int, int> b, pair<int, int> c) {
+	return (b.first - a.first) * (c.second - a.second) - (b.second - a.second) * (c.first - a.first);
+}
+vector<pair<int, int>> func(vector<pair<int, int>> v) {
+	vector<pair<int, int>> lower;
+	for (int i = 0; i < v.size(); i++) {
+		while (lower.size() >= 2 && cross(lower[lower.size() - 2], lower[lower.size() - 1], v[i]) <= 0) {
+			lower.pop_back();
+
+		}
+		lower.push_back(v[i]);
+	}
+	reverse(v.begin(), v.end());
+	vector<pair<int, int>> upper;
+	for (int i = 0; i < v.size(); i++) {
+		while (upper.size() >= 2 && cross(upper[upper.size() - 2], upper[upper.size() - 1], v[i]) <= 0) {
+			upper.pop_back();
+
+		}
+		upper.push_back(v[i]);
+	}
+	
+	vector < pair<int, int>> res;
+	for (auto y : lower) {
+		res.push_back(y);
+	}
+	lower.pop_back();
+	for (auto y : upper) {
+		res.push_back(y);
+	}
+	upper.pop_back();
+	return res;
+}
+
+int main() {
+	int m;
+	cin >> m;
+	vector<pair<int, int>> vo;
+	for (int j = 0; j < m; j++) {
+		int n;
+		cin >> n;
+		
+		for (int i = 0; i < n; i++) {
+			int x, y;
+			cin >> x >> y;
+			vo.push_back({ x,y });
+		}
+		
+	}
+	
+	set<pair<int, int>> s(vo.begin(), vo.end());
+	vector<pair<int, int>> u(s.begin(), s.end());
+	sort(u.begin(), u.end());
+	
+	vector<pair<int, int>> res = func(u);
+	double p = 0;
+	for (int i = 0; i < res.size()-1; i++) {
+		double d = sqrt((res[i + 1].first - res[i].first) * (res[i + 1].first - res[i].first) + (res[i + 1].second - res[i].second) * (res[i + 1].second - res[i].second));
+		p += d;
+	}
+	cout << p;
+	
+	return 0;
+}
